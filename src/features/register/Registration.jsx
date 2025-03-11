@@ -2,21 +2,18 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from './../../assets/fsl-clips-logo.png';
 
-function Login() {
+function Registration() {
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (email && password) {
-      if (email.startsWith('admin')) {
-        navigate('/dashboard');
-      } else {
-        navigate('/watch');
-      }
+    if (username && email && password) {
+      navigate('/watch');
     } else {
-      alert('Please fill in both email and password.');
+      alert('Please fill in username, email, and password.');
     }
   };
 
@@ -28,8 +25,22 @@ function Login() {
       <br/>
 
       <div className="bg-white p-8 rounded-lg shadow-lg w-100">
-        <h2 className="text-3xl font-semibold text-center text-space-cadet mb-12">Sign in</h2>
+        <h2 className="text-3xl font-semibold text-center text-space-cadet mb-12">Register</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-space-cadet" htmlFor="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              className="mt-2 w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter unique username"
+            />
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-space-cadet" htmlFor="email">Email Address</label>
             <input
@@ -44,7 +55,6 @@ function Login() {
             />
           </div>
           
-          {/* Password Input */}
           <div>
             <label className="block text-sm font-medium text-space-cadet" htmlFor="password">Password</label>
             <input
@@ -59,17 +69,16 @@ function Login() {
             />
           </div>
           
-          {/* Submit Button */}
           <button
             type="submit"
             className="w-full py-3 mt-6 bg-indigo-dye text-white font-semibold rounded-md hover:bg-indigo-dye focus:outline-none focus:ring-2 focus:ring-sky-blue"
           >
-            Sign in
+            Create account
           </button>
         </form>
         <div className="mt-4 text-center">
           <p className="text-sm text-space-cadet">
-            Don't have an account?&nbsp;<a href="/register" className="text-indigo-dye hover:underline">Register here.</a>
+            Already have an account?&nbsp;<a href="/login" className="text-indigo-dye hover:underline">Sign in here.</a>
           </p>
         </div>
       </div>
@@ -77,4 +86,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Registration;
