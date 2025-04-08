@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ManageClips from './manageclips/ManageClips'; 
+import ManageUsers from './manageusers/ManageUsers';
 import logo from './../../assets/fsl-clips-logo.png';
 
 const Dashboard = () => {
@@ -64,7 +65,7 @@ const Dashboard = () => {
       {/* Main Content */}
       <div className="flex-1 p-6 overflow-auto">
         {activePage === 'ManageClips' && <ManageClips />}
-        
+        {activePage === 'ManageUsers' && <ManageUsers />}
       </div>
     </div>
   );
