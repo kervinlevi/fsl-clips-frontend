@@ -1,24 +1,24 @@
-import React from 'react';
-
-const users = [
-  {
-    id: '1',
-    username: 'user1',
-    email: 'user1@email.com',
-    type: 'learner',
-    dateRegistered: '2025-03-11',
-  },
-  {
-    id: '2',
-    username: 'admin1',
-    email: 'admin1@email.com',
-    type: 'admin',
-    dateRegistered: '2025-03-10',
-  },
-  // Add more sample users as needed
-];
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const ManageUsers = () => {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchUsers = async () => {
+      try {
+        const headers = { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
+        const response = await axios.get('http://localhost:1337/users', { headers });
+        setUsers(response.data.users);
+        console.log(response)
+        setLoading(false);  // Stop the loading spinner
+      } catch (err) {
+        setError('Error fetching users');
+        setLoading(false);  // Stop loading if there’s an error
+      }
+  };
+
   const handleEdit = (id) => {
     alert(`Edit user with ID: ${id}`);
   };
@@ -26,6 +26,18 @@ const ManageUsers = () => {
   const handleDelete = (id) => {
     alert(`Delete user with ID: ${id}`);
   };
+
+  // Fetch users when the component mounts
+  // Empty dependency array means this runs only once when the component mounts
+  useEffect(() => { fetchUsers(); }, []); 
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+      return <div>{error}</div>;
+  }
 
   return (
     <div>
@@ -43,11 +55,11 @@ const ManageUsers = () => {
         </thead>
         <tbody>
           {users.map((user) => (
-            <tr key={user.id} className="border-b-2 border-neutral-200 hover:bg-neutral-200">
-              <td className="py-3 px-4">{user.id}</td>
+            <tr key={user.user_id} className="border-b-2 border-neutral-200 hover:bg-neutral-200">
+              <td className="py-3 px-4">{user.user_id}</td>
               <td className="py-3 px-4">{user.username}</td>
               <td className="py-3 px-4">{user.email}</td>
-              <td className="py-3 px-4">{user.dateRegistered}</td>
+              <td className="py-3 px-4">{user.date_added}</td>
               <td className="py-3 px-4">{user.type}</td>
               <td className="py-3 px-4">
                 <button
