@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from './../../assets/fsl-clips-logo.png';
+import axios from 'axios';
 
 function Registration() {
   const [username, setUsername] = useState('');
@@ -8,12 +9,24 @@ function Registration() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (username && email && password) {
+    try {
+      const response = await axios.post('http://localhost:1337/user/create', {
+        username,
+        email,
+        password,
+      });
+      console.log(response)
+
+      const { accessToken, refreshToken } = response.data
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+
       navigate('/watch');
-    } else {
-      alert('Please fill in username, email, and password.');
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.['error'] ?? err);
     }
   };
 
