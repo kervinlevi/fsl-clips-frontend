@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const fetchUsers = async () => {
@@ -19,25 +19,32 @@ const ManageUsers = () => {
       }
   };
 
-  const handleEdit = (id) => {
-    alert(`Edit user with ID: ${id}`);
-  };
+    const handleEdit = (id) => {
+      alert(`Edit user with ID: ${id}`);
+    };
 
-  const handleDelete = (id) => {
-    alert(`Delete user with ID: ${id}`);
-  };
+    const handleDelete = (id) => {
+      alert(`Delete user with ID: ${id}`);
+    };
 
-  // Fetch users when the component mounts
-  // Empty dependency array means this runs only once when the component mounts
-  useEffect(() => { fetchUsers(); }, []); 
+    // Fetch users when the component mounts
+    // Empty dependency array means this runs only once when the component mounts
+    let firstFetch = true
+    useEffect(() => { 
+      if (!firstFetch) return
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+      firstFetch = false
+      setLoading(true)
+      fetchUsers();
+    }, []); 
 
-  if (error) {
-      return <div>{error}</div>;
-  }
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>{error}</div>;
+    }
 
   return (
     <div>
