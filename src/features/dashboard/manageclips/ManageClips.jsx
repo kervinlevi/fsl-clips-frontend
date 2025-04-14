@@ -16,7 +16,7 @@ const videos = [
   // Add more sample videos as needed
 ];
 
-const ManageClips = () => {
+const ManageClips = ({handleAddClip}) => {
   const handleEdit = (id) => {
     alert(`Edit video with ID: ${id}`);
   };
@@ -28,6 +28,13 @@ const ManageClips = () => {
   return (
     <div>
       <h1 className="text-3xl font-bold mt-6 mb-6">Manage Clips</h1>
+      <button
+          onClick={handleAddClip}
+            type="button"
+            className="w-full py-3 mt-6 bg-indigo-dye text-white font-semibold rounded-md hover:bg-indigo-dye focus:outline-none focus:ring-2 focus:ring-sky-blue"
+          >
+            Add a clip
+        </button>
       <table className="min-w-full">
         <thead>
           <tr className="border-b-2 border-space-cadet">

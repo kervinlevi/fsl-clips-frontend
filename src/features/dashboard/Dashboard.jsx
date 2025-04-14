@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import ManageClips from './manageclips/ManageClips'; 
 import ManageUsers from './manageusers/ManageUsers';
 import logo from './../../assets/fsl-clips-logo.png';
+import AddClip from './manageclips/AddClip';
 
 const Dashboard = () => {
   const [activePage, setActivePage] = useState('ManageClips');
@@ -10,6 +11,10 @@ const Dashboard = () => {
   const handleLogout = () => {
     alert('You have been logged out');
     navigate('/login');
+  };
+
+  const handleAddClip = () => {
+    setActivePage('AddClip');
   };
 
   return (
@@ -23,11 +28,11 @@ const Dashboard = () => {
         </div>
 
         <ul>
-          <li className={`p-5 ${activePage === 'ManageClips' ? 'bg-indigo-dye' : ''}`}>
+          <li className={`p-5 ${activePage === 'ManageClips' || activePage === 'AddClip' ? 'bg-indigo-dye' : ''}`}>
             <Link
               to="#"
               onClick={() => setActivePage('ManageClips')}
-              className={`text-lg font-bold ${activePage === 'ManageClips' ? 'text-white' : 'text-indigo-dye'}`}
+              className={`text-lg font-bold ${activePage === 'ManageClips' || activePage === 'AddClip' ? 'text-white' : 'text-indigo-dye'}`}
             >
               Clips
             </Link>
@@ -64,7 +69,8 @@ const Dashboard = () => {
 
       {/* Main Content */}
       <div className="flex-1 p-6 overflow-auto">
-        {activePage === 'ManageClips' && <ManageClips />}
+        {activePage === 'ManageClips' && <ManageClips handleAddClip={() => handleAddClip()} />}
+        {activePage === 'AddClip' && <AddClip />}
         {activePage === 'ManageUsers' && <ManageUsers />}
       </div>
     </div>
