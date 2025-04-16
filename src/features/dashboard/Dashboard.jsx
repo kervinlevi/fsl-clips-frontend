@@ -5,6 +5,7 @@ import ManageUsers from './manageusers/ManageUsers';
 import logo from './../../assets/fsl-clips-logo.png';
 import AddClip from './manageclips/AddClip';
 import EditUser from './manageusers/EditUser';
+import EditClip from './manageclips/EditClip';
 
 const Dashboard = () => {
   const [activePage, setActivePage] = useState('ManageClips');
@@ -24,8 +25,13 @@ const Dashboard = () => {
     setActivePage('AddClip');
   };
 
+  const handleEditClip = (clip_id) => {
+    setActivePageParam(clip_id);
+    setActivePage('EditClip');
+  };
+
   const highlightClips = () => {
-    return activePage === 'ManageClips' || activePage === 'AddClip'
+    return activePage === 'ManageClips' || activePage === 'AddClip' || activePage === 'EditClip'
   }
 
   const highlightUsers = () => {
@@ -84,10 +90,11 @@ const Dashboard = () => {
 
       {/* Main Content */}
       <div className="flex-1 p-6 overflow-auto">
-        {activePage === 'ManageClips' && <ManageClips handleAddClip={() => handleAddClip()} />}
+        {activePage === 'ManageClips' && <ManageClips handleAddClip={() => handleAddClip()} handleEditClip={(clip_id) => handleEditClip(clip_id)} />}
         {activePage === 'AddClip' && <AddClip />}
         {activePage === 'ManageUsers' && <ManageUsers handleEditUser={(user_id) => handleEditUser(user_id)} />}
         {activePage === 'EditUser' && <EditUser user_id={activePageParam} />}
+        {activePage === 'EditClip' && <EditClip clip_id={activePageParam} />}
       </div>
     </div>
   );

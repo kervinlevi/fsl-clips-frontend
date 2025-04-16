@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import _ from 'lodash';
 
-const ManageClips = ({handleAddClip}) => {
+const ManageClips = ({handleAddClip, handleEditClip}) => {
   const [clips, setClips] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -30,12 +31,22 @@ const ManageClips = ({handleAddClip}) => {
     minute: "2-digit",
   };
 
-  const handleEdit = (id) => {
-    alert(`Edit video with ID: ${id}`);
-  };
+  const handleDelete = async (clip_id) => {
+    const isConfirmed = window.confirm(`Delete clip with id ${clip_id}?`);
+    if (!isConfirmed) {
+      return;
+    }
+    try {
+      const headers = { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
+      const response = await axios.delete(`http://localhost:1337/clip/${clip_id}`, { headers });
+      setClips(previousClips => _.filter(previousClips, clip => clip.clip_id !== clip_id));
 
-  const handleDelete = (id) => {
-    alert(`Delete video with ID: ${id}`);
+      console.log(response)
+      setLoading(false);
+    } catch (err) {
+      setError('Error deleting clip');
+      setLoading(false);
+    }
   };
 
   let firstFetch = true
@@ -97,7 +108,7 @@ const ManageClips = ({handleAddClip}) => {
               <td className="py-3 px-4 w-80">{new Date(clip.date_added).toLocaleString(undefined, dateFormatting)}</td>
               <td className="py-3 px-4">
                 <button
-                  onClick={() => handleEdit(clip.clip_id)}
+                  onClick={() => handleEditClip(clip.clip_id)}
                   className="text-indigo-dye hover:underline mr-4"
                 >
                   Edit
