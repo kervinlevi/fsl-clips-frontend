@@ -6,6 +6,7 @@ import logo from './../../assets/fsl-clips-logo.png';
 import AddClip from './manageclips/AddClip';
 import EditUser from './manageusers/EditUser';
 import EditClip from './manageclips/EditClip';
+import EditSettings from './settings/EditSettings';
 
 const Dashboard = () => {
   const [activePage, setActivePage] = useState('ManageClips');
@@ -67,11 +68,11 @@ const Dashboard = () => {
               Users
             </Link>
           </li>
-          <li className={`p-5 ${activePage === 'Settings' ? 'bg-indigo-dye' : ''}`}>
+          <li className={`p-5 ${activePage === 'EditSettings' ? 'bg-indigo-dye' : ''}`}>
             <Link
               to="#"
-              onClick={() => setActivePage('Settings')}
-              className={`text-lg font-bold ${activePage === 'Settings' ? 'text-white' : 'text-indigo-dye'}`}
+              onClick={() => setActivePage('EditSettings')}
+              className={`text-lg font-bold ${activePage === 'EditSettings' ? 'text-white' : 'text-indigo-dye'}`}
             >
               Settings
             </Link>
@@ -95,6 +96,7 @@ const Dashboard = () => {
         {activePage === 'ManageUsers' && <ManageUsers handleEditUser={(user_id) => handleEditUser(user_id)} />}
         {activePage === 'EditUser' && <EditUser user_id={activePageParam} />}
         {activePage === 'EditClip' && <EditClip clip_id={activePageParam} />}
+        {activePage === 'EditSettings' && <EditSettings />}
       </div>
     </div>
   );

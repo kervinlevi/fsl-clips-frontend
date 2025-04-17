@@ -16,6 +16,7 @@ const ManageClips = ({handleAddClip, handleEditClip}) => {
       const response = await axios.get('http://localhost:1337/clips', { headers });
       setClips(response.data.clips)
       setLoading(false); 
+      setError(null);
     } catch (err) {
       setError('Error fetching users');
       console.error('Error fetching users: ', err)
@@ -43,6 +44,7 @@ const ManageClips = ({handleAddClip, handleEditClip}) => {
 
       console.log(response)
       setLoading(false);
+      setError(null);
     } catch (err) {
       setError('Error deleting clip');
       setLoading(false);

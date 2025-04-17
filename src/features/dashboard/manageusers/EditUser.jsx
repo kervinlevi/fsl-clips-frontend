@@ -22,6 +22,7 @@ const EditUser = ({user_id}) => {
       setEmail(response.data.user.email);
       setIsAdmin(response.data.user.type === 'admin')
       setLoading(false);
+      setError(null);
     } catch (err) {
       console.error('Upload error:', err)
       setLoading(false);
@@ -52,6 +53,7 @@ const EditUser = ({user_id}) => {
       console.error('Got response')
       console.log(`editUser ${JSON.stringify(response)}`);
       setLoading(false);
+      setError(null);
       alert(`User was successfully updated.`);
     } catch (err) {
       console.error('Updating error:', err)

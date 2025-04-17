@@ -13,10 +13,11 @@ const ManageUsers = ({handleEditUser}) => {
         const response = await axios.get('http://localhost:1337/users', { headers });
         setUsers(response.data.users);
         console.log(response)
-        setLoading(false);  // Stop the loading spinner
+        setLoading(false); 
+        setError(null);
       } catch (err) {
         setError('Error fetching users');
-        setLoading(false);  // Stop loading if there’s an error
+        setLoading(false);
       }
   };
 
@@ -36,6 +37,7 @@ const ManageUsers = ({handleEditUser}) => {
 
       console.log(response)
       setLoading(false);
+      setError(null);
     } catch (err) {
       setError('Error deleting user');
       setLoading(false);
@@ -75,7 +77,7 @@ const ManageUsers = ({handleEditUser}) => {
         </thead>
         <tbody>
           {users.map((user) => (
-            <tr key={user.user_id} className="border-b-2 border-neutral-200 hover:bg-neutral-200">
+            <tr key={user.user_id} className="border-b-2 border-neutral-200 hover:bg-neutral-200 disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed">
               <td className="py-3 px-4">{user.user_id}</td>
               <td className="py-3 px-4">{user.username}</td>
               <td className="py-3 px-4">{user.email}</td>

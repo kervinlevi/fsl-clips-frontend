@@ -20,6 +20,7 @@ const EditClip = ({clip_id}) => {
       setDescriptionEn(response.data.clip.description_en);
       setClip(response.data.clip);
       setLoading(false);
+      setError(null);
     } catch (err) {
       console.error('Upload error:', err)
       setLoading(false);
