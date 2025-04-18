@@ -139,7 +139,7 @@ const EditUser = ({user_id}) => {
         </div>
         <button
             type="submit"
-            className="w-200 py-3 bg-indigo-dye text-white font-semibold rounded-md hover:bg-indigo-dye focus:outline-none focus:ring-2 focus:ring-sky-blue"
+            className="w-200 py-3 bg-indigo-dye text-white font-semibold rounded-md hover:bg-indigo-dye focus:outline-none focus:ring-2 focus:ring-sky-blue  cursor-pointer"
           >
             Update user
         </button>

@@ -19,9 +19,11 @@ function Login() {
       const response = await axios.post('http://localhost:1337/user/login', body);
       console.log(response)
 
-      const { type, accessToken, refreshToken } = response.data
+      const { type, accessToken, refreshToken, user_id, username } = response.data
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('user_id', user_id);
+      localStorage.setItem('username', username);
 
       if (type == 'admin') {
         navigate('/dashboard');

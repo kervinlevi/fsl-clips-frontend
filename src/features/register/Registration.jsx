@@ -19,9 +19,11 @@ function Registration() {
       });
       console.log(response)
 
-      const { accessToken, refreshToken } = response.data
+      const { accessToken, refreshToken, user_id, username } = response.data
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('user_id', user_id);
+      localStorage.setItem('username', username);
 
       navigate('/watch');
     } catch (err) {

@@ -72,7 +72,7 @@ const ManageClips = ({handleAddClip, handleEditClip}) => {
       <button
           onClick={handleAddClip}
             type="button"
-            className="flex-col w-100 py-4 bg-indigo-dye text-white font-semibold rounded-md hover:bg-indigo-dye focus:outline-none focus:ring-2 focus:ring-sky-blue"
+            className="flex-col w-100 py-4 bg-indigo-dye text-white font-semibold rounded-md hover:bg-indigo-dye focus:outline-none focus:ring-2 focus:ring-sky-blue cursor-pointer"
           >
             Add a clip
       </button>
@@ -106,13 +106,13 @@ const ManageClips = ({handleAddClip, handleEditClip}) => {
               <td className="py-3 px-4">
                 <button
                   onClick={() => handleEditClip(clip.clip_id)}
-                  className="text-indigo-dye hover:underline mr-4"
+                  className="text-indigo-dye hover:underline mr-4 cursor-pointer"
                 >
                   Edit
                 </button>
                 <button
                   onClick={() => handleDelete(clip.clip_id)}
-                  className="text-rose-red hover:underline"
+                  className="text-rose-red hover:underline cursor-pointer"
                 >
                   Delete
                 </button>

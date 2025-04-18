@@ -38,7 +38,7 @@ const AddClip = () => {
             type="file"
             accept="video/*" 
             onChange={e => setClip(e.target.files[0])}
-            className="block w-200 text-sm text-space-cadet file:me-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-dye file:text-white hover:file:bg-indigo-dye"
+            className="block w-200 text-sm text-space-cadet file:me-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-dye file:text-white hover:file:bg-indigo-dye cursor-pointer"
             required
           />
         </div>
@@ -69,7 +69,7 @@ const AddClip = () => {
 
         <button
             type="submit"
-            className="w-200 py-3 mt-6 bg-indigo-dye text-white font-semibold rounded-md hover:bg-indigo-dye focus:outline-none focus:ring-2 focus:ring-sky-blue"
+            className="w-200 py-3 mt-6 bg-indigo-dye text-white font-semibold rounded-md hover:bg-indigo-dye focus:outline-none focus:ring-2 focus:ring-sky-blue cursor-pointer"
           >
             Upload clip
         </button>

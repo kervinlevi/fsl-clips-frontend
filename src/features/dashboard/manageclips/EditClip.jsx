@@ -73,7 +73,7 @@ const EditClip = ({clip_id}) => {
         <div className="flex w-1/5 mr-6 h-fill items-center">
             {clip &&(
                 <video
-                    className="aspect-9/16 rounded-lg size-fit"
+                    className="aspect-9/16 rounded-lg size-fit cursor-pointer"
                     src={`http://localhost:1337/${clip.video_url}`}
                     type="video/mp4"
                     muted
@@ -127,7 +127,7 @@ const EditClip = ({clip_id}) => {
             )}
             <button
                 type="submit"
-                className="w-full py-3 bg-indigo-dye text-white font-semibold rounded-md hover:bg-indigo-dye focus:outline-none focus:ring-2 focus:ring-sky-blue"
+                className="w-full py-3 bg-indigo-dye text-white font-semibold rounded-md hover:bg-indigo-dye focus:outline-none focus:ring-2 focus:ring-sky-blue cursor-pointer"
             >
                 Update clip details
             </button>
