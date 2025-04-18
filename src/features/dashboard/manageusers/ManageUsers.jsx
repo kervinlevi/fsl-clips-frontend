@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import _ from 'lodash';
+import api from '../../../api/api';
 
 const ManageUsers = ({handleEditUser}) => {
   const [users, setUsers] = useState([]);
@@ -9,8 +10,7 @@ const ManageUsers = ({handleEditUser}) => {
 
   const fetchUsers = async () => {
       try {
-        const headers = { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
-        const response = await axios.get('http://localhost:1337/users', { headers });
+        const response = await api.get('/users')
         setUsers(response.data.users);
         console.log(response)
         setLoading(false); 
@@ -31,8 +31,7 @@ const ManageUsers = ({handleEditUser}) => {
       return;
     }
     try {
-      const headers = { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
-      const response = await axios.delete(`http://localhost:1337/user/${user_id}`, { headers });
+      const response = await api.delete(`/user/${user_id}`);
       setUsers(previousUsers => _.filter(previousUsers, user => user.user_id !== user_id));
 
       console.log(response)
