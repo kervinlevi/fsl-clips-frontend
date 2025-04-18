@@ -14,7 +14,8 @@ const Dashboard = () => {
 
   const handleLogout = () => {
     alert('You have been logged out');
-    navigate('/login');
+    localStorage.clear();
+    navigate("/login", { replace: true });
   };
 
   const handleEditUser = (user_id) => {

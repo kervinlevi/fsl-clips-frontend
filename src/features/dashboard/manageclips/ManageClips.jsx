@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../../api/api';
 import _ from 'lodash';
 
 const ManageClips = ({handleAddClip, handleEditClip}) => {
@@ -8,12 +8,8 @@ const ManageClips = ({handleAddClip, handleEditClip}) => {
   const [error, setError] = useState(null);
 
   const fetchClips = async () => {
-    const headers = { 
-      'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-    }
-
     try {
-      const response = await axios.get('http://localhost:1337/clips', { headers });
+      const response = await api.get('/clips');
       setClips(response.data.clips)
       setLoading(false); 
       setError(null);
@@ -38,8 +34,7 @@ const ManageClips = ({handleAddClip, handleEditClip}) => {
       return;
     }
     try {
-      const headers = { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
-      const response = await axios.delete(`http://localhost:1337/clip/${clip_id}`, { headers });
+      const response = await api.delete(`/clip/${clip_id}`);
       setClips(previousClips => _.filter(previousClips, clip => clip.clip_id !== clip_id));
 
       console.log(response)

@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../api/api";
 import _ from "lodash";
 
 const WatchClips = () => {
@@ -17,10 +17,10 @@ const WatchClips = () => {
 
   const fetchRandomClips = async () => {
     const exclude = encodeURIComponent(JSON.stringify(lastClips));
-    const url = `http://localhost:1337/randomClips?exclude=${exclude}`;
+    const url = `/randomClips?exclude=${exclude}`;
 
     try {
-      const response = await axios.get(url);
+      const response = await api.get(url);
 
       // Remember most recent clips so they can be excluded next fetch
       // This will only exclude the most recently fetched clips not all previously fetch clips
@@ -92,6 +92,7 @@ const WatchClips = () => {
 
   const handleMenuClick = () => {
     alert("You have been logged out");
+    localStorage.clear();
     navigate("/login", { replace: true });
   };
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../../api/api';
 
 const EditClip = ({clip_id}) => {
   const [descriptionPh, setDescriptionPh] = useState('');
@@ -9,12 +9,8 @@ const EditClip = ({clip_id}) => {
   const [error, setError] = useState(null);
 
   const fetchClip = async () => {
-    const headers = { 
-      'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-    }
-
     try {
-      const response = await axios.get(`http://localhost:1337/clip/${clip_id}`, { headers });
+      const response = await api.get(`/clip/${clip_id}`);
       console.log(`fetchClip ${JSON.stringify(response.data.clip)}`);
       setDescriptionPh(response.data.clip.description_ph);
       setDescriptionEn(response.data.clip.description_en);
@@ -30,15 +26,12 @@ const EditClip = ({clip_id}) => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    const headers = { 
-      'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-    }
     const formData = new FormData();
     formData.append('description_ph', descriptionPh)
     formData.append('description_en', descriptionEn)
 
     try {
-      const response = await axios.post(`http://localhost:1337/clip/${clip_id}`, formData, { headers });
+      const response = await api.post(`/clip/${clip_id}`, formData);
       alert(`Update success`);
       console.log(`Update success: ${response}`)
     } catch (err) {

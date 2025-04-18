@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../../api/api';
 
 const EditUser = ({user_id}) => {
   const [user, setUser] = useState([]);
@@ -10,12 +10,8 @@ const EditUser = ({user_id}) => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   const fetchUser = async () => {
-    const headers = { 
-      'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-    }
-
     try {
-      const response = await axios.get(`http://localhost:1337/user/${user_id}`, { headers });
+      const response = await api.get(`/user/${user_id}`);
       console.log(`fetchUser ${JSON.stringify(response.data.user)}`);
       setUser(response.data.user);
       setUsername(response.data.user.username);
@@ -32,10 +28,6 @@ const EditUser = ({user_id}) => {
 
   const updateUser = async (e) => {
     e.preventDefault();
-    const headers = { 
-      'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-    }
-
     const type = isAdmin? 'admin': 'learner'
     if (user.username === username && user.email === email && user.type === type) {
       setLoading(false);
@@ -49,7 +41,7 @@ const EditUser = ({user_id}) => {
     formData.append('type', type);
     try {
       console.error('Updating...')
-      const response = await axios.post(`http://localhost:1337/user/${user_id}`, formData, { headers });
+      const response = await api.post(`/user/${user_id}`, formData);
       console.error('Got response')
       console.log(`editUser ${JSON.stringify(response)}`);
       setLoading(false);

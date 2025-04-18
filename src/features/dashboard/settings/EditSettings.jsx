@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from '../../../api/api';
 import _ from "lodash";
 
 const EditSettings = () => {
@@ -10,14 +10,8 @@ const EditSettings = () => {
   const [error, setError] = useState(null);
 
   const fetchSettings = async () => {
-    const headers = {
-      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-    };
-
     try {
-      const response = await axios.get(`http://localhost:1337/settings`, {
-        headers,
-      });
+      const response = await api.get("/settings");
       console.log(`fetchUser ${JSON.stringify(response.data)}`);
       setSettings(response.data);
       setQuizEnabled(response.data.quiz_enabled);
@@ -33,9 +27,6 @@ const EditSettings = () => {
 
   const updateSettings = async (e) => {
     e.preventDefault();
-    const headers = {
-      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-    };
     if (
       settings.quiz_enabled === quizEnabled &&
       settings.clips_before_quiz === clipsBeforeQuiz
@@ -50,11 +41,7 @@ const EditSettings = () => {
     formData.append("quiz_enabled", quizEnabled);
     formData.append("clips_before_quiz", clipsBeforeQuiz);
     try {
-      const response = await axios.post(
-        `http://localhost:1337/settings`,
-        formData,
-        { headers }
-      );
+      const response = await api.post(`/settings`, formData);
       console.log(`Edit settings ${JSON.stringify(response.data)}`);
       setSettings(response.data);
       setQuizEnabled(response.data.quiz_enabled);

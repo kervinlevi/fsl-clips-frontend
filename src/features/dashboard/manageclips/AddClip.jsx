@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../../../api/api';
 
 const AddClip = () => {
   const [descriptionPh, setDescriptionPh] = useState('');
@@ -9,8 +9,7 @@ const AddClip = () => {
   const handleUpload = async (e) => {
     e.preventDefault();
 
-    const headers = { 
-      'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+    const headers = {
       'Content-Type': 'multipart/form-data'
     }
     const formData = new FormData();
@@ -19,7 +18,7 @@ const AddClip = () => {
     formData.append('clip', clip)
 
     try {
-      const response = await axios.post('http://localhost:1337/clip', formData, { headers });
+      const response = await api.post('/clip', formData, { headers });
       alert(`Upload success`);
       console.log(`Upload success: ${response}`)
     } catch (err) {
