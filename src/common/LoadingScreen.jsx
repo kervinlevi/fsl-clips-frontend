@@ -1,0 +1,38 @@
+import React, { useState, useEffect } from 'react';
+
+const LoadingScreen = ({ message = "Loading...", isVisible = true }) => {
+  const fadeDuration = 300;
+  const [show, setShow] = useState(isVisible);
+  const [fadeOut, setFadeOut] = useState(false);
+
+  useEffect(() => {
+    if (isVisible) {
+      setShow(true);
+      setFadeOut(false);
+    } else {
+      setFadeOut(true);
+      const timeout = setTimeout(() => {
+        setShow(false);
+      }, fadeDuration);
+      return () => clearTimeout(timeout);
+    }
+  }, [isVisible]);
+
+  if (!show) return null;
+
+  return (
+    <div className={`absolute h-screen w-full flex flex-col justify-center items-center z-50 transition-opacity duration-${fadeDuration} ${
+      fadeOut ? 'opacity-0' : 'opacity-100'
+    }`}>
+        <div className="animate-spin">
+            <img
+              src="/ic-spinner.svg"
+              alt="Sign out"
+              className="size-20 object-fill"
+            /></div>
+        {/* <p className="text-indigo-dye mt-4 text-lg font-medium">{message}</p> */}
+    </div>
+  );
+};
+
+export default LoadingScreen;

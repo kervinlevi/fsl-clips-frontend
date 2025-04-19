@@ -12,11 +12,10 @@ const WatchClips = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const clipsLengthRef = useRef(0);
-
-  let lastClips = [];
+  const lastClipsRef = useRef([]);
 
   const fetchRandomClips = async () => {
-    const exclude = encodeURIComponent(JSON.stringify(lastClips));
+    const exclude = encodeURIComponent(JSON.stringify(lastClipsRef.current));
     const url = `/randomClips?exclude=${exclude}`;
 
     try {
@@ -25,7 +24,7 @@ const WatchClips = () => {
       // Remember most recent clips so they can be excluded next fetch
       // This will only exclude the most recently fetched clips not all previously fetch clips
       const newClips = response.data.clips;
-      lastClips = _.map(newClips, (clip) => clip.clip_id);
+      lastClipsRef.current = _.map(newClips, (clip) => clip.clip_id);
 
       // Append newly fetched clips
       setClips((currentClips) => [...currentClips, ...newClips]);
@@ -91,9 +90,7 @@ const WatchClips = () => {
   }, []);
 
   const handleMenuClick = () => {
-    alert("You have been logged out");
-    localStorage.clear();
-    navigate("/login", { replace: true });
+    navigate("/profile");
   };
 
   const handleSwipeTap = () => {
@@ -153,7 +150,7 @@ const WatchClips = () => {
               type="video/mp4"
             />
 
-            <div className="absolute bottom-0 left-0 w-full md:p-4 pl-8 pr-8 pb-24 z-10 bg-gradient-to-t from-black/70 to-transparent rounded-b-lg">
+            <div className="absolute bottom-0 left-0 w-full md:p-4 pl-8 pr-8 pb-24 pt-24 z-10 bg-gradient-to-t from-black/70 to-transparent rounded-b-lg">
               <h3 className="text-white text-lg font-semibold mb-1 line-clamp-3">
                 {clip.description_ph}
               </h3>
@@ -175,7 +172,7 @@ const WatchClips = () => {
         <button
           onClick={showPreviousClip}
           disabled={clips.size > 0 && currentIndex > 0}
-          className="bg-white p-4 rounded-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-dye cursor-pointer"
+          className="bg-white p-4 rounded-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-dye cursor-pointer transition-bg duration-100"
         >
           <span className="text-2xl">↑</span>
         </button>
@@ -183,7 +180,7 @@ const WatchClips = () => {
         <button
           onClick={showNextClip}
           disabled={clips.size > 0 && currentIndex < clips.size - 1}
-          className="bg-white p-4 rounded-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-dye cursor-pointer"
+          className="bg-white p-4 rounded-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-dye cursor-pointer transition-bg duration-100"
         >
           <span className="text-2xl">↓</span>
         </button>
@@ -193,9 +190,13 @@ const WatchClips = () => {
       <div className="fixed top-8 left-8">
         <button
           onClick={handleMenuClick}
-          className="bg-white h-12 w-12 rounded-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-dye cursor-pointer"
+          className="bg-white h-12 w-12 rounded-full shadow-sm opacity-50 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-indigo-dye cursor-pointer flex items-center justify-center transition-opacity duration-100"
         >
-          <span className="text-2xl">☰</span>
+          <img
+              src="/ic-profile.svg"
+              alt="Edit profile"
+              className="size-8 object-fill"
+            />
         </button>
       </div>
     </div>

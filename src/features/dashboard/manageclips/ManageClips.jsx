@@ -1,24 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import api from '../../../api/api';
-import _ from 'lodash';
+import React, { useState, useEffect } from "react";
+import api from "../../../api/api";
+import _ from "lodash";
+import LoadingScreen from "../../../common/LoadingScreen";
 
-const ManageClips = ({handleAddClip, handleEditClip}) => {
+const ManageClips = ({ handleAddClip, handleEditClip }) => {
   const [clips, setClips] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const fetchClips = async () => {
     try {
-      const response = await api.get('/clips');
-      setClips(response.data.clips)
-      setLoading(false); 
+      const response = await api.get("/clips");
+      setClips(response.data.clips);
+      setLoading(false);
       setError(null);
     } catch (err) {
-      setError('Error fetching users');
-      console.error('Error fetching users: ', err)
+      setError("Error fetching users");
+      console.error("Error fetching users: ", err);
       setLoading(false);
     }
-  }
+  };
 
   const dateFormatting = {
     year: "numeric",
@@ -35,61 +36,65 @@ const ManageClips = ({handleAddClip, handleEditClip}) => {
     }
     try {
       const response = await api.delete(`/clip/${clip_id}`);
-      setClips(previousClips => _.filter(previousClips, clip => clip.clip_id !== clip_id));
+      setClips((previousClips) =>
+        _.filter(previousClips, (clip) => clip.clip_id !== clip_id)
+      );
 
-      console.log(response)
+      console.log(response);
       setLoading(false);
       setError(null);
     } catch (err) {
-      setError('Error deleting clip');
+      setError("Error deleting clip");
       setLoading(false);
     }
   };
 
-  let firstFetch = true
-  useEffect(() => { 
-    if (!firstFetch) return
+  let firstFetch = true;
+  useEffect(() => {
+    if (!firstFetch) return;
 
-    firstFetch = false
-    setLoading(true)
+    firstFetch = false;
+    setLoading(true);
     fetchClips();
-  }, []); 
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  }, []);
 
   if (error) {
-      return <div>{error}</div>;
+    return <div>{error}</div>;
   }
 
   return (
     <div>
-      <div className='w-full flex flex-row justify-between relative py-4'>
-        <div className='flex items-center'>
+      <div className="w-full flex flex-row justify-between relative py-4">
+        <LoadingScreen isVisible={loading} />
+        <div className="flex items-center">
           <h1 className=" text-3xl font-bold">Manage Clips</h1>
         </div>
-      <button
+        <button
           onClick={handleAddClip}
-            type="button"
-            className="flex-col w-100 py-4 bg-indigo-dye text-white font-semibold rounded-md hover:bg-indigo-dye focus:outline-none focus:ring-2 focus:ring-sky-blue cursor-pointer"
-          >
-            Add a clip
-      </button>
+          type="button"
+          className="flex-col w-100 py-4 bg-indigo-dye text-white font-semibold rounded-md hover:bg-indigo-dye focus:outline-none focus:ring-2 focus:ring-sky-blue cursor-pointer"
+        >
+          Add a clip
+        </button>
       </div>
       <table className="w-full">
         <thead>
           <tr className="border-b-2 border-space-cadet">
             <th className="py-3 px-4 text-left text-space-cadet">Thumbnail</th>
             <th className="py-3 px-4 text-left text-space-cadet">ID</th>
-            <th className="py-3 px-4 text-left text-space-cadet">Description</th>
+            <th className="py-3 px-4 text-left text-space-cadet">
+              Description
+            </th>
             <th className="py-3 px-4 text-left text-space-cadet">Date Added</th>
             <th className="py-3 px-4 text-left text-space-cadet">Actions</th>
           </tr>
         </thead>
         <tbody>
           {clips.map((clip) => (
-            <tr key={clip.clip_id} className="border-b-2 border-neutral-200 hover:bg-neutral-200">
+            <tr
+              key={clip.clip_id}
+              className="border-b-2 border-neutral-200 hover:bg-neutral-200"
+            >
               <td className="py-3 px-4 w-40">
                 <img
                   src={`http://localhost:1337/${clip.thumbnail_url}`}
@@ -102,7 +107,12 @@ const ManageClips = ({handleAddClip, handleEditClip}) => {
                 <div className="truncate w-80">{clip.description_ph}</div>
                 <div className="truncate w-80">{clip.description_en}</div>
               </td>
-              <td className="py-3 px-4 w-80">{new Date(clip.date_added).toLocaleString(undefined, dateFormatting)}</td>
+              <td className="py-3 px-4 w-80">
+                {new Date(clip.date_added).toLocaleString(
+                  undefined,
+                  dateFormatting
+                )}
+              </td>
               <td className="py-3 px-4">
                 <button
                   onClick={() => handleEditClip(clip.clip_id)}

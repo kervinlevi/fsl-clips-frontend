@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../../../api/api';
 
 const EditUser = ({user_id}) => {
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [username, setUsername] = useState('');
@@ -50,7 +50,7 @@ const EditUser = ({user_id}) => {
     } catch (err) {
       console.error('Updating error:', err)
       setLoading(false);
-      setError(`Error updating user ${user_id}`);
+      alert(`Failed to update. ${err?.response?.data?.error}`);
     }
   };
 

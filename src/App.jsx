@@ -4,6 +4,7 @@ import Login from "./features/login/Login";
 import Registration from "./features/register/Registration";
 import Dashboard from "./features/dashboard/Dashboard";
 import WatchClips from "./features/home/WatchClips";
+import EditProfile from "./features/profile/EditProfile";
 import "./App.css";
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Route path="/register" element={<Registration />} />
         <Route path="/watch" element={<WatchClips />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/profile" element={<EditProfile />} />
       </Routes>
     </Router>
   );
