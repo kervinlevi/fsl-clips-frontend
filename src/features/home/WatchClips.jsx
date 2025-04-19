@@ -130,14 +130,14 @@ const WatchClips = () => {
   return (
     <div
       {...handleSwipe}
-      className="min-h-screen bg-sky-blue relative overflow-hidden touch-none"
+      className="bg-sky-blue relative overflow-auto touch-none"
     >
       <div
         style={{
           height: `${clips.length * 100}vh`,
           transform: `translateY(-${currentIndex * 100}vh)`,
         }}
-        className="h-screen flex flex-col items-center transition-transform duration-500 ease-out"
+        className="flex flex-col items-center transition-transform duration-500 ease-out"
       >
         {clips.map((clip, index) => (
           <div key={index} className="h-screen aspect-9/16 relative">
@@ -153,7 +153,7 @@ const WatchClips = () => {
               type="video/mp4"
             />
 
-            <div className="absolute bottom-0 left-0 w-full p-4 z-10 bg-gradient-to-t from-black/70 to-transparent rounded-b-lg">
+            <div className="absolute bottom-0 left-0 w-full md:p-4 pl-8 pr-8 pb-24 z-10 bg-gradient-to-t from-black/70 to-transparent rounded-b-lg">
               <h3 className="text-white text-lg font-semibold mb-1 line-clamp-3">
                 {clip.description_ph}
               </h3>

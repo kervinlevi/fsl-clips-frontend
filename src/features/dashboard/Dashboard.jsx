@@ -41,16 +41,16 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="flex h-screen bg-white">
+    <div className="flex flex-col md:flex-row h-screen bg-white">
       {/* Sidebar */}
-      <div className="w-64 bg-sky-blue text-white pt-5 pb-5">
+      <div className="w-full md:w-64 bg-sky-blue text-white pt-5 pb-5 flex-shrink-0">
 
         <div className="w-full flex-col pl-5 pr-5 text-center">
-            <img src={logo} alt="FSL Clips Logo" />
+            <img src={logo} alt="FSL Clips Logo" className="mx-auto mb-4"/>
             <h2 className="text-2xl font-bold mb-16">Admin Dashboard</h2>
         </div>
 
-        <ul>
+        <ul className="flex md:flex-col justify-center md:justify-start">
           <li className={`p-5 ${highlightClips() ? 'bg-indigo-dye' : ''}`}>
             <Link
               to="#"
