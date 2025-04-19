@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import _ from "lodash";
 import api from "../../../api/api";
+import { useModal } from "../../../common/ModalContext";
+import LoadingScreen from "../../../common/LoadingScreen";
 
 const ManageUsers = ({ handleEditUser }) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { openInfoModal, openConfirmModal } = useModal();
 
   const fetchUsers = async () => {
     try {
@@ -24,22 +27,30 @@ const ManageUsers = ({ handleEditUser }) => {
     handleEditUser(user_id);
   };
 
-  const handleDelete = async (user_id) => {
-    const isConfirmed = window.confirm(`Delete user with id ${user_id}?`);
-    if (!isConfirmed) {
+  const handleDelete = async (user) => {
+    const confirmed = await openConfirmModal({
+      title: "Delete user",
+      message: `Are you sure you want to delete user ${user.username}?`,
+      yes: "Yes",
+      no: "No"
+    });
+    if (!confirmed) {
       return;
     }
     try {
-      const response = await api.delete(`/user/${user_id}`);
+      const response = await api.delete(`/user/${user.user_id}`);
       setUsers((previousUsers) =>
-        _.filter(previousUsers, (user) => user.user_id !== user_id)
+        _.filter(previousUsers, (thisUser) => thisUser.user_id !== user.user_id)
       );
 
       console.log(response);
       setLoading(false);
       setError(null);
     } catch (err) {
-      setError("Error deleting user");
+      await openInfoModal({
+        title: "Delete failed",
+        message: err.response?.data?.['error'] ?? err,
+      });
       setLoading(false);
     }
   };
@@ -61,16 +72,13 @@ const ManageUsers = ({ handleEditUser }) => {
     minute: "2-digit",
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   if (error) {
     return <div>{error}</div>;
   }
 
   return (
     <div>
+      <LoadingScreen isVisible={loading} />
       <h1 className="text-3xl font-bold mt-6 mb-6">Manage Users</h1>
       <table className="min-w-full">
         <thead>
@@ -109,7 +117,7 @@ const ManageUsers = ({ handleEditUser }) => {
                   Edit
                 </button>
                 <button
-                  onClick={() => handleDelete(user.user_id)}
+                  onClick={() => handleDelete(user)}
                   className="text-rose-red hover:underline disabled:text-space-cadet/70 cursor-pointer disabled:cursor-not-allowed"
                   disabled={localStorage.getItem("user_id") == user.user_id}
                 >

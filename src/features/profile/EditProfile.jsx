@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import logo from "./../../assets/fsl-clips-logo.png";
 import api from "../../api/api";
 import { useModal } from "../../common/ModalContext";
+import LoadingScreen from "../../common/LoadingScreen";
 
 function EditProfile() {
   const [user, setUser] = useState();
@@ -77,7 +78,7 @@ function EditProfile() {
       no: "No"
     });
     if (!confirmed) {
-      return
+      return;
     }
     localStorage.clear();
     navigate("/login", { replace: true });
@@ -123,16 +124,13 @@ function EditProfile() {
     fetchSelf();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   if (error) {
     return <div>{error}</div>;
   }
 
   return (
     <div className="min-h-screen min-w-screen bg-sky-blue flex flex-col items-center justify-center p-8">
+      <LoadingScreen isVisible={loading} />
       <div className="flex items-center justify-center mb-4 w-1/3 min-w-100">
         <img src={logo} alt="FSL Clips Logo" className="h-16 object-contain" />
       </div>

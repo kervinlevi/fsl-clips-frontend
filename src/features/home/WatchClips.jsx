@@ -3,6 +3,7 @@ import { useSwipeable } from "react-swipeable";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/api";
 import _ from "lodash";
+import LoadingScreen from "../../common/LoadingScreen";
 
 const WatchClips = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const WatchClips = () => {
   const clipsLengthRef = useRef(0);
   const lastClipsRef = useRef([]);
 
+  
   const fetchRandomClips = async () => {
     const exclude = encodeURIComponent(JSON.stringify(lastClipsRef.current));
     const url = `/randomClips?exclude=${exclude}`;
@@ -46,6 +48,7 @@ const WatchClips = () => {
 
     firstFetch = false;
     setLoading(true);
+
     fetchRandomClips();
   }, []);
 
@@ -116,22 +119,16 @@ const WatchClips = () => {
     trackMouse: true,
   });
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
   return (
     <div
       {...handleSwipe}
       className="bg-sky-blue relative overflow-auto touch-none"
     >
+      <LoadingScreen isVisible={loading} />
       <div
         style={{
           height: `${clips.length * 100}vh`,
+          'min-height': "100vh",
           width: "100vw",
           transform: `translateY(-${currentIndex * 100}vh)`,
         }}
@@ -147,7 +144,7 @@ const WatchClips = () => {
               }}
               src={`http://localhost:1337/${clip.video_url}`}
               poster={`http://localhost:1337/${clip.thumbnail_url}`}
-              className="object-cover object-center md:rounded-lg bg-space-cadet cursor-all-scroll"
+              className="object-cover object-center md:rounded-lg bg-sky-blue cursor-all-scroll"
               muted
               playsInline
               loop
@@ -176,8 +173,8 @@ const WatchClips = () => {
       <div className="fixed bottom-8 right-4 md:right-8 flex flex-col items-center space-y-4">
         <button
           onClick={showPreviousClip}
-          disabled={clips.size > 0 && currentIndex > 0}
-          className="bg-white p-4 rounded-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-dye cursor-pointer transition-bg duration-100"
+          disabled={currentIndex <= 0}
+          className="bg-white p-4 rounded-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-dye cursor-pointer transition-bg duration-100 disabled:cursor-not-allowed disabled:bg-white"
         >
           <span className="text-2xl">↑</span>
         </button>
@@ -185,17 +182,18 @@ const WatchClips = () => {
         <button
           onClick={showNextClip}
           disabled={clips.size > 0 && currentIndex < clips.size - 1}
-          className="bg-white p-4 rounded-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-dye cursor-pointer transition-bg duration-100"
+          className="bg-white p-4 rounded-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-dye cursor-pointer transition-bg duration-100 disabled:cursor-not-allowed"
         >
           <span className="text-2xl">↓</span>
         </button>
       </div>
 
+
       {/* Top left menu */}
       <div className="fixed md:left-8 top-8 left-4">
         <button
           onClick={handleMenuClick}
-          className="bg-white h-12 w-12 rounded-full shadow-sm opacity-50 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-indigo-dye cursor-pointer flex items-center justify-center transition-opacity duration-100"
+          className="bg-white h-12 w-12 rounded-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-dye cursor-pointer flex items-center justify-center transition-opacity duration-100"
         >
           <img
             src="/ic-profile.svg"

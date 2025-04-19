@@ -2,18 +2,24 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from './../../assets/fsl-clips-logo.png';
 import axios from 'axios';
+import { useModal } from '../../common/ModalContext';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const { openInfoModal } = useModal();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) {
-      alert('Please fill in both email and password.');
-      return
+      await openInfoModal({
+        title: "Sign in failed",
+        message: "Please fill in both email and password.",
+      });
+      return;
     }
+
     try {
       const body = { email, password }
       const response = await axios.post('http://localhost:1337/user/login', body);
@@ -32,7 +38,11 @@ function Login() {
       }
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.['error'] ?? err);
+      await openInfoModal({
+        title: "Sign in failed",
+        message: err.response?.data?.['error'] ?? err,
+      });
+      return;
     }
   };
 
@@ -78,7 +88,7 @@ function Login() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-3 mt-6 bg-indigo-dye text-white font-semibold rounded-md hover:bg-indigo-dye focus:outline-none focus:ring-2 focus:ring-sky-blue"
+            className="w-full py-3 mt-6 bg-indigo-dye text-white font-semibold rounded-md hover:bg-indigo-dye focus:outline-none focus:ring-2 focus:ring-sky-blue cursor-pointer"
           >
             Sign in
           </button>

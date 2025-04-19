@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../../api/api';
+import { useModal } from '../../../common/ModalContext';
+import LoadingScreen from '../../../common/LoadingScreen';
 
 const EditUser = ({user_id}) => {
   const [user, setUser] = useState({});
@@ -8,6 +10,7 @@ const EditUser = ({user_id}) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
+  const { openInfoModal } = useModal();
 
   const fetchUser = async () => {
     try {
@@ -31,8 +34,11 @@ const EditUser = ({user_id}) => {
     const type = isAdmin? 'admin': 'learner'
     if (user.username === username && user.email === email && user.type === type) {
       setLoading(false);
-      alert(`No data updated.`);
-      return
+      await openInfoModal({
+        title: "Update profile failed",
+        message: "No changes to update.",
+      });
+      return;
     }
 
     const formData = new FormData();
@@ -46,11 +52,15 @@ const EditUser = ({user_id}) => {
       console.log(`editUser ${JSON.stringify(response)}`);
       setLoading(false);
       setError(null);
-      alert(`User was successfully updated.`);
+      setUser(response.data.user);
+      await openInfoModal({ message: "Updated user successfully!" });
     } catch (err) {
       console.error('Updating error:', err)
       setLoading(false);
-      alert(`Failed to update. ${err?.response?.data?.error}`);
+      await openInfoModal({
+        title: "Update user failed",
+        message: err.response?.data?.["error"] ?? err,
+      });
     }
   };
 
@@ -71,16 +81,13 @@ const EditUser = ({user_id}) => {
     fetchUser();
   }, []); 
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   if (error) {
       return <div>{error}</div>;
   }
 
   return (
     <div>
+      <LoadingScreen isVisible={loading} />
       <h1 className="text-3xl font-bold mt-6 mb-6">Edit user</h1>
 
       <form onSubmit={updateUser} className="space-y-1">

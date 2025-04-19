@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from './../../assets/fsl-clips-logo.png';
 import axios from 'axios';
+import { useModal } from '../../common/ModalContext';
 
 function Registration() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const { openInfoModal } = useModal();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,10 +27,17 @@ function Registration() {
       localStorage.setItem('user_id', user_id);
       localStorage.setItem('username', responseUsername);
 
+      await openInfoModal({
+        title: "Success!",
+        message: "Your account has been created."
+      });
       navigate('/watch');
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.['error'] ?? err);
+      await openInfoModal({
+        title: "Failed to create an account",
+        message: err.response?.data?.['error'] ?? err,
+      });
     }
   };
 
@@ -86,7 +95,7 @@ function Registration() {
           
           <button
             type="submit"
-            className="w-full py-3 mt-6 bg-indigo-dye text-white font-semibold rounded-md hover:bg-indigo-dye focus:outline-none focus:ring-2 focus:ring-sky-blue"
+            className="w-full py-3 mt-6 bg-indigo-dye text-white font-semibold rounded-md hover:bg-indigo-dye focus:outline-none focus:ring-2 focus:ring-sky-blue cursor-pointer"
           >
             Create account
           </button>

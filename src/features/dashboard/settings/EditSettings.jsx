@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import api from '../../../api/api';
 import _ from "lodash";
+import LoadingScreen from "../../../common/LoadingScreen";
+import { useModal } from "../../../common/ModalContext";
 
 const EditSettings = () => {
   const [settings, setSettings] = useState({});
@@ -8,6 +10,7 @@ const EditSettings = () => {
   const [clipsBeforeQuiz, setClipsBeforeQuiz] = useState(2);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { openInfoModal } = useModal();
 
   const fetchSettings = async () => {
     try {
@@ -21,7 +24,7 @@ const EditSettings = () => {
     } catch (err) {
       console.error("Upload error:", err);
       setLoading(false);
-      setError(`Error fetching user ${user_id}`);
+      setError("Error fetching settings");
     }
   };
 
@@ -33,7 +36,11 @@ const EditSettings = () => {
     ) {
       setLoading(false);
       setError(null);
-      alert(`No data updated.`);
+
+      await openInfoModal({
+        title: "Update settings failed",
+        message: "No changes to update.",
+      });
       return;
     }
 
@@ -47,11 +54,15 @@ const EditSettings = () => {
       setQuizEnabled(response.data.quiz_enabled);
       setClipsBeforeQuiz(response.data.clips_before_quiz);
       setLoading(false);
-      alert(`Settings was successfully updated.`);
+      await openInfoModal({ message: "Settings was successfully updated!" });
     } catch (err) {
       console.error("Updating error:", err);
       setLoading(false);
-      setError(`Error updating settings.`);
+      await openInfoModal({
+        title: "Update settings failed",
+        message: err.response?.data?.["error"] ?? err,
+      });
+      return;
     }
   };
 
@@ -64,16 +75,13 @@ const EditSettings = () => {
     fetchSettings();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   if (error) {
     return <div>{error}</div>;
   }
 
   return (
     <div>
+      <LoadingScreen isVisible={loading} />
       <h1 className="text-3xl font-bold mt-6 mb-6">Settings</h1>
       <form onSubmit={updateSettings} className="space-y-1">
         <div className="w-1/2">

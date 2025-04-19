@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const LoadingScreen = ({ message = "Loading...", isVisible = true }) => {
+const LoadingScreen = ({ isVisible = true }) => {
   const fadeDuration = 300;
   const [show, setShow] = useState(isVisible);
   const [fadeOut, setFadeOut] = useState(false);
@@ -30,7 +30,6 @@ const LoadingScreen = ({ message = "Loading...", isVisible = true }) => {
               alt="Sign out"
               className="size-20 object-fill"
             /></div>
-        {/* <p className="text-indigo-dye mt-4 text-lg font-medium">{message}</p> */}
     </div>
   );
 };

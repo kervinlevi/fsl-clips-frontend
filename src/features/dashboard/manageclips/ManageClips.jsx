@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import api from "../../../api/api";
 import _ from "lodash";
 import LoadingScreen from "../../../common/LoadingScreen";
+import { useModal } from "../../../common/ModalContext";
 
 const ManageClips = ({ handleAddClip, handleEditClip }) => {
   const [clips, setClips] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { openConfirmModal } = useModal();
 
   const fetchClips = async () => {
     try {
@@ -30,10 +32,16 @@ const ManageClips = ({ handleAddClip, handleEditClip }) => {
   };
 
   const handleDelete = async (clip_id) => {
-    const isConfirmed = window.confirm(`Delete clip with id ${clip_id}?`);
-    if (!isConfirmed) {
+    const confirmed = await openConfirmModal({
+      title: `Delete`,
+      message: `Are you sure you want to delete clip ${clip_id}?`,
+      yes: "Yes",
+      no: "No"
+    });
+    if (!confirmed) {
       return;
     }
+
     try {
       const response = await api.delete(`/clip/${clip_id}`);
       setClips((previousClips) =>
