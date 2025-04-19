@@ -118,22 +118,8 @@ function EditProfile() {
       <div className="flex items-center justify-center mb-4 w-1/3 min-w-100">
         <img src={logo} alt="FSL Clips Logo" className="h-16 object-contain" />
       </div>
-
       <div className="bg-white p-8 rounded-lg shadow-lg w-1/3 min-w-100">
-        <div className="flex mb-4">
-          <button
-            onClick={handleLogOut}
-            className="ml-auto flex items-center text-sm p-2 bg-space-cadet/10 hover:bg-space-cadet/20 rounded-md justify-between gap-2 text-space-cadet font-medium cursor-pointer transition-bg duration-100"
-          >
-            <img
-              src="/ic-logout.svg"
-              alt="Sign out"
-              className="size-5 object-fill"
-            />
-            <span>Sign out</span>
-          </button>
-        </div>
-
+        <h2 className="text-3xl font-semibold text-center text-space-cadet mb-12">Edit profile</h2>
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label
@@ -211,14 +197,28 @@ function EditProfile() {
       </div>
 
       {/* Top left menu */}
-      <div className="fixed top-8 left-8">
+      <div className="w-screen pl-4 pr-4 fixed flex justify-between top-8">
         <button 
-        className="bg-white h-12 rounded-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-dye cursor-pointer flex items-center transition-bg duration-100"
+        className="bg-white md:h-12 md:w-auto h-12 w-12 rounded-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-dye cursor-pointer flex items-center transition-bg duration-100"
         onClick={handleReturn}>
-          <span className="text-2xl md:pl-4 md:pr-0 pl-4 pr-4">←</span>
+          <span className="text-2xl md:pl-4 md:pr-0 w-full md:w-auto">←</span>
           <span className="text-sm md:pl-2 md:pr-4 md:inline hidden">Resume watching</span>
         </button>
+
+
+        <button
+            onClick={handleLogOut}
+            className="bg-white h-12 rounded-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-dye cursor-pointer flex items-center transition-bg duration-100 gap-4 pl-4 pr-4"
+          >
+            <span className="text-sm">Sign out</span>
+            <img
+              src="/ic-logout.svg"
+              alt="Sign out"
+              className="size-5 object-fill"
+            />
+          </button>
       </div>
+
     </div>
   );
 }

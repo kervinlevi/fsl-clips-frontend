@@ -132,17 +132,22 @@ const WatchClips = () => {
       <div
         style={{
           height: `${clips.length * 100}vh`,
+          width: "100vw",
           transform: `translateY(-${currentIndex * 100}vh)`,
         }}
-        className="flex flex-col items-center transition-transform duration-500 ease-out"
+        className="flex flex-col items-center justify-center transition-transform duration-500 ease-out"
       >
         {clips.map((clip, index) => (
-          <div key={index} className="h-screen aspect-9/16 relative">
+          <div key={index} className="relative center">
             <video
               ref={(el) => (videoRefs.current[index] = el)}
+              style={{
+                height: "100vh",
+                width: "56.25vh",
+              }}
               src={`http://localhost:1337/${clip.video_url}`}
               poster={`http://localhost:1337/${clip.thumbnail_url}`}
-              className="object-cover rounded-lg bg-space-cadet cursor-all-scroll"
+              className="object-cover object-center md:rounded-lg bg-space-cadet cursor-all-scroll"
               muted
               playsInline
               loop
@@ -150,11 +155,11 @@ const WatchClips = () => {
               type="video/mp4"
             />
 
-            <div className="absolute bottom-0 left-0 w-full md:p-4 pl-8 pr-8 pb-24 pt-24 z-10 bg-gradient-to-t from-black/70 to-transparent rounded-b-lg">
+            <div className="absolute bottom-0 left-0 w-full md:p-4 pl-4 pr-24 pb-24 pt-24 z-10 bg-gradient-to-t from-black/70 to-transparent md:rounded-b-lg">
               <h3 className="text-white text-lg font-semibold mb-1 line-clamp-3">
                 {clip.description_ph}
               </h3>
-              
+
               {/* Don't show description_en if it's empty or if it's the same as description_ph */}
               {clip.description_en.trim() !== "" &&
                 clip.description_en !== clip.description_ph && (
@@ -168,7 +173,7 @@ const WatchClips = () => {
       </div>
 
       {/* Bottom right buttons */}
-      <div className="fixed bottom-8 right-8 flex flex-col items-center space-y-4">
+      <div className="fixed bottom-8 right-4 md:right-8 flex flex-col items-center space-y-4">
         <button
           onClick={showPreviousClip}
           disabled={clips.size > 0 && currentIndex > 0}
@@ -187,16 +192,16 @@ const WatchClips = () => {
       </div>
 
       {/* Top left menu */}
-      <div className="fixed top-8 left-8">
+      <div className="fixed md:left-8 top-8 left-4">
         <button
           onClick={handleMenuClick}
           className="bg-white h-12 w-12 rounded-full shadow-sm opacity-50 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-indigo-dye cursor-pointer flex items-center justify-center transition-opacity duration-100"
         >
           <img
-              src="/ic-profile.svg"
-              alt="Edit profile"
-              className="size-8 object-fill"
-            />
+            src="/ic-profile.svg"
+            alt="Edit profile"
+            className="size-8 object-fill"
+          />
         </button>
       </div>
     </div>
