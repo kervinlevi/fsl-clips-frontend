@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "./../../assets/fsl-clips-logo.png";
 import api from "../../api/api";
+import { useModal } from "../../common/ModalContext";
 
 function EditProfile() {
   const [user, setUser] = useState();
@@ -11,6 +12,7 @@ function EditProfile() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { openInfoModal, openConfirmModal } = useModal();
 
   const fetchSelf = async () => {
     try {
@@ -34,12 +36,18 @@ function EditProfile() {
     e.preventDefault();
     if (!email || !username) {
       setLoading(false);
-      alert("Please fill in username and email.");
+      await openInfoModal({
+        title: "Update profile failed",
+        message: "Please fill in username and email.",
+      });
       return;
     }
     if (user.username === username && user.email === email && password === "") {
       setLoading(false);
-      alert(`No data updated.`);
+      await openInfoModal({
+        title: "Update profile failed",
+        message: "No changes to update.",
+      });
       return;
     }
 
@@ -48,18 +56,29 @@ function EditProfile() {
         password !== "" ? { username, email, password } : { username, email };
       const response = await api.post("/self/update", body);
       console.log(response);
-      alert("Updated profile successfully!");
+      await openInfoModal({ message: "Updated profile successfully!" });
       setPassword("");
     } catch (err) {
       console.error(err);
       setPassword("");
       setLoading(false);
-      alert(err.response?.data?.["error"] ?? err);
+      await openInfoModal({
+        title: "Update profile failed",
+        message: err.response?.data?.["error"] ?? err,
+      });
     }
   };
 
-  const handleLogOut = () => {
-    alert("You have been logged out");
+  const handleLogOut = async () => {
+    const confirmed = await openConfirmModal({
+      title: "Sign out",
+      message: "Are you sure you want to sign out?",
+      yes: "Yes",
+      no: "No"
+    });
+    if (!confirmed) {
+      return
+    }
     localStorage.clear();
     navigate("/login", { replace: true });
   };
@@ -92,7 +111,6 @@ function EditProfile() {
       console.error(err);
       setLoading(false);
       setError("Error deleting profile.");
-      alert(err.response?.data?.["error"] ?? err);
     }
   };
 
@@ -119,7 +137,9 @@ function EditProfile() {
         <img src={logo} alt="FSL Clips Logo" className="h-16 object-contain" />
       </div>
       <div className="bg-white p-8 rounded-lg shadow-lg w-1/3 min-w-100">
-        <h2 className="text-3xl font-semibold text-center text-space-cadet mb-12">Edit profile</h2>
+        <h2 className="text-3xl font-semibold text-center text-space-cadet mb-12">
+          Edit profile
+        </h2>
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label
@@ -198,27 +218,28 @@ function EditProfile() {
 
       {/* Top left menu */}
       <div className="w-screen pl-4 pr-4 fixed flex justify-between top-8">
-        <button 
-        className="bg-white md:h-12 md:w-auto h-12 w-12 rounded-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-dye cursor-pointer flex items-center transition-bg duration-100"
-        onClick={handleReturn}>
+        <button
+          className="bg-white md:h-12 md:w-auto h-12 w-12 rounded-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-dye cursor-pointer flex items-center transition-bg duration-100"
+          onClick={handleReturn}
+        >
           <span className="text-2xl md:pl-4 md:pr-0 w-full md:w-auto">←</span>
-          <span className="text-sm md:pl-2 md:pr-4 md:inline hidden">Resume watching</span>
+          <span className="text-sm md:pl-2 md:pr-4 md:inline hidden">
+            Resume watching
+          </span>
         </button>
 
-
         <button
-            onClick={handleLogOut}
-            className="bg-white h-12 rounded-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-dye cursor-pointer flex items-center transition-bg duration-100 gap-4 pl-4 pr-4"
-          >
-            <span className="text-sm">Sign out</span>
-            <img
-              src="/ic-logout.svg"
-              alt="Sign out"
-              className="size-5 object-fill"
-            />
-          </button>
+          onClick={handleLogOut}
+          className="bg-white h-12 rounded-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-dye cursor-pointer flex items-center transition-bg duration-100 gap-4 pl-4 pr-4"
+        >
+          <span className="text-sm">Sign out</span>
+          <img
+            src="/ic-logout.svg"
+            alt="Sign out"
+            className="size-5 object-fill"
+          />
+        </button>
       </div>
-
     </div>
   );
 }
