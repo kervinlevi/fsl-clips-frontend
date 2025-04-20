@@ -28,7 +28,8 @@ const WatchClips = () => {
       // Remember most recent clips so they can be excluded next fetch
       // This will only exclude the most recently fetched clips not all previously fetch clips
       const newClips = response.data.clips;
-      lastClipsRef.current = _.map(newClips, (clip) => clip.clip_id);
+      lastClipsRef.current = _.uniq(_.map(newClips, (clip) => clip.clip_id));
+      localStorage.setItem("lastClips", JSON.stringify(lastClipsRef.current));
 
       // Append newly fetched clips
       setClips((currentClips) => {
@@ -55,6 +56,15 @@ const WatchClips = () => {
     setLoading(true);
 
     console.log("Fetching first clips");
+
+    try {
+      const savedLastClips = JSON.parse(localStorage.getItem("lastClips"));
+      if (_.isArray(savedLastClips)) {
+        lastClipsRef.current = savedLastClips;
+      }
+    } catch (err) {
+      console.log("Failed to retrieve savedLastClips");
+    }
     fetchRandomClips();
   }, []);
 
@@ -121,6 +131,10 @@ const WatchClips = () => {
     if (currentIndex + 1 < clips.length) {
       quizShowing.current = clips[currentIndex + 1].quiz == true;
       setCurrentIndex(currentIndex + 1);
+
+      if (_.last(clips)?.quiz == true) {
+        return;
+      }
 
       // Fetch random clips when index is near the end
       if (currentIndex > clips.length - 3) {
