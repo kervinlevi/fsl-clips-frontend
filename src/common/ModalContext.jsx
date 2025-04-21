@@ -134,6 +134,7 @@ export const ModalProvider = ({ children }) => {
 
       {modalContent && (
         <div
+          data-testid="modal-overlay"
           className={`fixed inset-0 ${
             modalOptions.overlay ? "bg-space-cadet/80" : ""
           } flex items-center justify-center z-50`}
