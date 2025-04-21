@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 import { useNavigate } from "react-router-dom";
+import Confetti from "react-confetti";
 import api from "../../api/api";
 import _ from "lodash";
 import LoadingScreen from "../../common/LoadingScreen";
@@ -13,6 +14,7 @@ const WatchClips = () => {
   const [clips, setClips] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showConfetti, setShowConfetti] = useState(false);
   const clipsLengthRef = useRef(0);
   const lastClipsRef = useRef([]);
   const quizShowing = useRef(false);
@@ -98,9 +100,11 @@ const WatchClips = () => {
 
     // Show if user is correct or not through a modal
     if (selected.correct == true) {
+      setShowConfetti(true);
       await openInfoModal({
-        title: "Correct!",
+        title: "Correct! 🎉🎉🎉",
         message: `You answered the quiz correctly! It's "${selected.description_ph}"`,
+        overlay: false,
       });
     } else {
       const correctOption = _.find(options, (option) => option.correct == true);
@@ -188,6 +192,10 @@ const WatchClips = () => {
       {...handleSwipe}
       className="bg-sky-blue relative overflow-auto touch-none"
     >
+      {showConfetti && (
+        <Confetti initialVelocityY={20} gravity={0.15} numberOfPieces={300} />
+      )}
+
       <LoadingScreen isVisible={loading} />
       <div
         style={{
@@ -230,7 +238,7 @@ const WatchClips = () => {
             />
 
             {!clip.quiz && (
-              <div className="absolute bottom-0 left-0 w-full md:p-4 pl-4 pr-24 pb-24 pt-24 z-10 bg-gradient-to-t from-black/70 to-transparent md:rounded-b-lg">
+              <div className="absolute bottom-0 left-0 w-full md:p-4 pl-8 pr-24 pb-24 pt-24 z-10 bg-gradient-to-t from-black/70 to-transparent md:rounded-b-lg">
                 <h3 className="text-white text-lg font-semibold mb-1 line-clamp-3">
                   {clip.description_ph}
                 </h3>
@@ -251,7 +259,7 @@ const WatchClips = () => {
             )}
 
             {clip.quiz && (
-              <div className="absolute bottom-0 left-0 w-full md:p-4 pl-4 pr-24 pb-24 pt-24 z-10 bg-gradient-to-t from-black/70 to-transparent md:rounded-b-lg flex flex-col gap-2">
+              <div className="absolute bottom-0 left-0 w-full md:p-4 pl-8 pl-4 pr-24 pb-24 pt-24 z-10 bg-gradient-to-t from-black/70 to-transparent md:rounded-b-lg flex flex-col gap-2">
                 {clip.options.map((option, index) => (
                   <button
                     key={`option-${index}`}

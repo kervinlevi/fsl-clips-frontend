@@ -5,20 +5,23 @@ const ModalContext = createContext();
 // Root ModalProvider to be used in App.jsx
 export const ModalProvider = ({ children }) => {
   const [modalContent, setModalContent] = useState(null);
+  const [modalOptions, setModalOptions] = useState({ overlay: true });
 
   const closeModal = useCallback(() => {
     setModalContent(null);
   }, []);
 
   // 1. openModal: for showing any JSX content
-  const openModal = useCallback((content) => {
+  const openModal = useCallback((content, options = { overlay: true }) => {
+    setModalOptions(options);
     setModalContent(() => content);
   }, []);
 
   // 2. openConfirmModal: modal with two buttons. It returns a boolean confirmed.
   const openConfirmModal = useCallback(
-    ({ title, message, yes = "Confirm", no = "Cancel" }) => {
+    ({ title, message, yes = "Confirm", no = "Cancel", overlay = true }) => {
       return new Promise((resolve) => {
+        setModalOptions({ overlay });
         setModalContent(
           <div>
             {title && <h2 className="text-lg font-medium mb-2">{title}</h2>}
@@ -52,8 +55,9 @@ export const ModalProvider = ({ children }) => {
 
   // 3. openInfoModal: modal with one button.
   const openInfoModal = useCallback(
-    ({ title, message, ok = "Okay" }) => {
+    ({ title, message, ok = "Okay", overlay = true }) => {
       return new Promise((resolve) => {
+        setModalOptions({ overlay });
         setModalContent(
           <div>
             {title && <h2 className="text-lg font-medium mb-2">{title}</h2>}
@@ -79,12 +83,16 @@ export const ModalProvider = ({ children }) => {
   );
 
   return (
-    <ModalContext.Provider value={{ openModal, openInfoModal, openConfirmModal, closeModal }}>
+    <ModalContext.Provider
+      value={{ openModal, openInfoModal, openConfirmModal, closeModal }}
+    >
       {children}
 
       {modalContent && (
         <div
-          className="fixed inset-0 bg-space-cadet/80 flex items-center justify-center z-50"
+          className={`fixed inset-0 ${
+            modalOptions.overlay ? "bg-space-cadet/80" : ""
+          } flex items-center justify-center z-50`}
           onClick={closeModal}
         >
           <div
