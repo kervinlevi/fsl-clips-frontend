@@ -26,8 +26,9 @@ const LoadingScreen = ({ isVisible = true }) => {
     }`}>
         <div className="animate-spin">
             <img
+              data-testid="spinner-img"
               src="/ic-spinner.svg"
-              alt="Sign out"
+              alt="spinner"
               className="size-20 object-fill"
             /></div>
     </div>
