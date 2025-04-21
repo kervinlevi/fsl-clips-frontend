@@ -75,7 +75,7 @@ function EditProfile() {
       title: "Sign out",
       message: "Are you sure you want to sign out?",
       yes: "Yes",
-      no: "No"
+      no: "No",
     });
     if (!confirmed) {
       return;
@@ -90,17 +90,27 @@ function EditProfile() {
 
   const handleDelete = async () => {
     try {
-      const isConfirmed = window.confirm(
-        "Do you want to delete your own account?"
-      );
-      if (!isConfirmed) {
+      const confirmed = await openConfirmModal({
+        title: "Delete account",
+        message: "Do you want to delete your own account?",
+        yes: "Yes",
+        no: "No",
+        warning: true
+      });
+      if (!confirmed) {
         return;
       }
 
-      const isConfirmedAgain = window.confirm(
-        "This action will log you out and you won't be able to use your account anymore. Are you sure?"
-      );
-      if (!isConfirmedAgain) {
+      const confirmedAgain = await openConfirmModal({
+        title: "This action is permanent",
+        message: `This action will log you out and you won\'t \
+         be able to use your account anymore. Are you really sure \
+         you want to delete your account?`,
+        yes: "Yes",
+        no: "No",
+        warning: true
+      });
+      if (!confirmedAgain) {
         return;
       }
 

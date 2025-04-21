@@ -106,6 +106,7 @@ const WatchClips = () => {
         title: "Correct! 🎉🎉🎉",
         message: `You answered the quiz correctly! It's "${selected.description_ph}"`,
         overlay: false,
+        closeOnOverlayClick: false
       });
     } else {
       const correctOption = _.find(options, (option) => option.correct == true);

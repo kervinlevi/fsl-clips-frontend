@@ -1,11 +1,21 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useRef,
+} from "react";
 
 const ModalContext = createContext();
 
 // Root ModalProvider to be used in App.jsx
 export const ModalProvider = ({ children }) => {
   const [modalContent, setModalContent] = useState(null);
-  const [modalOptions, setModalOptions] = useState({ overlay: true });
+  const [modalOptions, setModalOptions] = useState({
+    overlay: true,
+    closeOnOverlayClick: true,
+  });
+  const beforeCloseRef = useRef(null); // store the beforeClose callback
 
   const closeModal = useCallback(() => {
     setModalContent(null);
@@ -19,9 +29,23 @@ export const ModalProvider = ({ children }) => {
 
   // 2. openConfirmModal: modal with two buttons. It returns a boolean confirmed.
   const openConfirmModal = useCallback(
-    ({ title, message, yes = "Confirm", no = "Cancel", overlay = true }) => {
+    ({
+      title,
+      message,
+      yes = "Confirm",
+      no = "Cancel",
+      overlay = true,
+      closeOnOverlayClick = false,
+      warning = false,
+    }) => {
       return new Promise((resolve) => {
-        setModalOptions({ overlay });
+        setModalOptions({ overlay, closeOnOverlayClick });
+        beforeCloseRef.current = null;
+        const buttonBg = warning ? "bg-rose-red" : "bg-indigo-dye";
+        beforeCloseRef.current = () => {
+          resolve(false);
+        };
+
         setModalContent(
           <div>
             {title && <h2 className="text-lg font-medium mb-2">{title}</h2>}
@@ -32,7 +56,7 @@ export const ModalProvider = ({ children }) => {
                   resolve(true);
                   closeModal();
                 }}
-                className="p-2 bg-indigo-dye text-white min-w-24 font-semibold rounded-md hover:bg-indigo-dye focus:outline-none focus:ring-2 focus:ring-sky-blue cursor-pointer"
+                className={`p-2 ${buttonBg} text-white min-w-24 font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-sky-blue cursor-pointer`}
               >
                 {yes}
               </button>
@@ -55,9 +79,19 @@ export const ModalProvider = ({ children }) => {
 
   // 3. openInfoModal: modal with one button.
   const openInfoModal = useCallback(
-    ({ title, message, ok = "Okay", overlay = true }) => {
+    ({
+      title,
+      message,
+      ok = "Okay",
+      overlay = true,
+      closeOnOverlayClick = true,
+    }) => {
       return new Promise((resolve) => {
-        setModalOptions({ overlay });
+        setModalOptions({ overlay, closeOnOverlayClick });
+        beforeCloseRef.current = () => {
+          resolve(); // call resolve on overlay click by default
+        };
+
         setModalContent(
           <div>
             {title && <h2 className="text-lg font-medium mb-2">{title}</h2>}
@@ -82,6 +116,16 @@ export const ModalProvider = ({ children }) => {
     [closeModal]
   );
 
+  const handleOverlayClick = () => {
+    if (modalOptions.closeOnOverlayClick === true) {
+      if (beforeCloseRef.current) {
+        beforeCloseRef.current();
+        beforeCloseRef.current = null;
+      }
+      closeModal();
+    }
+  };
+
   return (
     <ModalContext.Provider
       value={{ openModal, openInfoModal, openConfirmModal, closeModal }}
@@ -93,7 +137,7 @@ export const ModalProvider = ({ children }) => {
           className={`fixed inset-0 ${
             modalOptions.overlay ? "bg-space-cadet/80" : ""
           } flex items-center justify-center z-50`}
-          onClick={closeModal}
+          onClick={handleOverlayClick}
         >
           <div
             className="bg-white rounded-lg w-1/2 min-w-100 shadow-lg p-8 relative"

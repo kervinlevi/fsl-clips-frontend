@@ -37,7 +37,9 @@ const ManageClips = ({ handleAddClip, handleEditClip }) => {
       title: `Delete`,
       message: `Are you sure you want to delete clip ${clip_id}?`,
       yes: "Yes",
-      no: "No"
+      no: "No",
+      warning: true,
+      closeOnOverlayClick: true
     });
     if (!confirmed) {
       return;

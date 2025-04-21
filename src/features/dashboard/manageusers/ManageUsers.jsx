@@ -34,6 +34,8 @@ const ManageUsers = ({ handleEditUser }) => {
       message: `Are you sure you want to delete user ${user.username}?`,
       yes: "Yes",
       no: "No",
+      warning: true,
+      closeOnOverlayClick: true
     });
     if (!confirmed) {
       return;
