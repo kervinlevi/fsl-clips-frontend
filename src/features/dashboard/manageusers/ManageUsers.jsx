@@ -3,6 +3,7 @@ import _ from "lodash";
 import api from "../../../api/api";
 import { useModal } from "../../../common/ModalContext";
 import LoadingScreen from "../../../common/LoadingScreen";
+import ErrorScreen from "../../../common/ErrorScreen";
 
 const ManageUsers = ({ handleEditUser }) => {
   const [users, setUsers] = useState([]);
@@ -32,7 +33,7 @@ const ManageUsers = ({ handleEditUser }) => {
       title: "Delete user",
       message: `Are you sure you want to delete user ${user.username}?`,
       yes: "Yes",
-      no: "No"
+      no: "No",
     });
     if (!confirmed) {
       return;
@@ -49,7 +50,7 @@ const ManageUsers = ({ handleEditUser }) => {
     } catch (err) {
       await openInfoModal({
         title: "Delete failed",
-        message: err.response?.data?.['error'] ?? err,
+        message: err.response?.data?.["error"] ?? err,
       });
       setLoading(false);
     }
@@ -72,14 +73,17 @@ const ManageUsers = ({ handleEditUser }) => {
     minute: "2-digit",
   };
 
-  if (error) {
-    return <div>{error}</div>;
-  }
-
   return (
     <div>
-      <LoadingScreen isVisible={loading} />
-      <h1 className="text-3xl font-bold mt-6 mb-6">Manage Users</h1>
+      <div className="w-full flex flex-row justify-between relative py-4">
+        <LoadingScreen isVisible={loading} />
+        {error && (
+          <ErrorScreen
+            message="Users couldn't be retrieved at the moment. Pleast try again later."
+          />
+        )}
+        <h1 className="text-3xl font-bold">Manage Users</h1>
+      </div>
       <table className="min-w-full">
         <thead>
           <tr className="border-b-2 border-space-cadet">

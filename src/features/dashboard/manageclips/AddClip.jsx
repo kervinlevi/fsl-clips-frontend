@@ -30,7 +30,7 @@ const AddClip = () => {
     } catch (err) {
       await openInfoModal({
         title: "Upload failed",
-        message: err.response?.data?.['error'] ?? err,
+        message: err.response?.data?.['error'] ?? "We're experiencing server issues. Try again later.",
       });
     }
   };

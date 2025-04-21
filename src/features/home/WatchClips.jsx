@@ -6,6 +6,7 @@ import api from "../../api/api";
 import _ from "lodash";
 import LoadingScreen from "../../common/LoadingScreen";
 import { useModal } from "../../common/ModalContext";
+import ErrorScreen from "../../common/ErrorScreen";
 
 const WatchClips = () => {
   const navigate = useNavigate();
@@ -43,7 +44,9 @@ const WatchClips = () => {
       setLoading(false);
       setError(null);
     } catch (err) {
-      setError("Error fetching clips");
+      if (clipsLengthRef.current == 0) {
+        setError("Error fetching clips");
+      }
       console.error("Error fetching clips: ", err);
       setLoading(false);
     }
@@ -56,8 +59,6 @@ const WatchClips = () => {
 
     firstFetch = false;
     setLoading(true);
-
-    console.log("Fetching first clips");
 
     try {
       const savedLastClips = JSON.parse(localStorage.getItem("lastClips"));
@@ -197,6 +198,10 @@ const WatchClips = () => {
       )}
 
       <LoadingScreen isVisible={loading} />
+      {error && (
+        <ErrorScreen message="Clips couldn't be retrieved at the moment. Pleast try again later." />
+      )}
+
       <div
         style={{
           height: `${clips.length * 100}vh`,
@@ -293,7 +298,7 @@ const WatchClips = () => {
         <button
           onClick={showNextClip}
           disabled={
-            (clips.size > 0 && currentIndex < clips.size - 1) ||
+            (clipsLengthRef.current > 0 && currentIndex == clipsLengthRef.current - 1) ||
             quizShowing.current
           }
           className="bg-white p-4 rounded-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-dye cursor-pointer transition-bg duration-100 disabled:cursor-not-allowed disabled:bg-white"

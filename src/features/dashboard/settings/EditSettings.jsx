@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import api from '../../../api/api';
+import api from "../../../api/api";
 import _ from "lodash";
 import LoadingScreen from "../../../common/LoadingScreen";
 import { useModal } from "../../../common/ModalContext";
+import ErrorScreen from "../../../common/ErrorScreen";
 
 const EditSettings = () => {
   const [settings, setSettings] = useState({});
@@ -75,15 +76,16 @@ const EditSettings = () => {
     fetchSettings();
   }, []);
 
-  if (error) {
-    return <div>{error}</div>;
-  }
-
   return (
     <div>
-      <LoadingScreen isVisible={loading} />
-      <h1 className="text-3xl font-bold mt-6 mb-6">Settings</h1>
-      <form onSubmit={updateSettings} className="space-y-1">
+      <div className="w-full flex flex-row justify-between relative py-4">
+        <LoadingScreen isVisible={loading} />
+        {error && (
+          <ErrorScreen message="Settings couldn't be retrieved at the moment. Pleast try again later." />
+        )}
+        <h1 className="text-3xl font-bold">Settings</h1>
+      </div>
+      <form onSubmit={updateSettings} className={`space-y-1 ${error ? "hidden": ""}`}>
         <div className="w-1/2">
           <label className="inline-flex items-center cursor-pointer w-1/2 justify-between">
             <input

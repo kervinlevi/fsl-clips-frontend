@@ -40,7 +40,7 @@ function Login() {
       console.error(err);
       await openInfoModal({
         title: "Sign in failed",
-        message: err.response?.data?.['error'] ?? err,
+        message: err?.response?.data?.['error'] ?? "We're experiencing server issues. Try again later.",
       });
       return;
     }

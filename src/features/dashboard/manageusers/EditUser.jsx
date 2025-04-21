@@ -26,6 +26,11 @@ const EditUser = ({user_id}) => {
       console.error('Upload error:', err)
       setLoading(false);
       setError(`Error fetching user ${user_id}`);
+      await openInfoModal({
+        title: "Edit user",
+        message: "User cannot be retrieved at the moment. Please try editing again later.",
+      });
+      return;
     }
   };
 
@@ -80,10 +85,6 @@ const EditUser = ({user_id}) => {
     setLoading(true)
     fetchUser();
   }, []); 
-
-  if (error) {
-      return <div>{error}</div>;
-  }
 
   return (
     <div>

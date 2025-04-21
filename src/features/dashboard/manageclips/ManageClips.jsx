@@ -3,6 +3,7 @@ import api from "../../../api/api";
 import _ from "lodash";
 import LoadingScreen from "../../../common/LoadingScreen";
 import { useModal } from "../../../common/ModalContext";
+import ErrorScreen from "../../../common/ErrorScreen";
 
 const ManageClips = ({ handleAddClip, handleEditClip }) => {
   const [clips, setClips] = useState([]);
@@ -17,8 +18,8 @@ const ManageClips = ({ handleAddClip, handleEditClip }) => {
       setLoading(false);
       setError(null);
     } catch (err) {
-      setError("Error fetching users");
-      console.error("Error fetching users: ", err);
+      setError("Error fetching clips");
+      console.error("Error fetching clips: ", err);
       setLoading(false);
     }
   };
@@ -66,16 +67,15 @@ const ManageClips = ({ handleAddClip, handleEditClip }) => {
     fetchClips();
   }, []);
 
-  if (error) {
-    return <div>{error}</div>;
-  }
-
   return (
     <div>
       <div className="w-full flex flex-row justify-between relative py-4">
         <LoadingScreen isVisible={loading} />
+        {error && (
+          <ErrorScreen message="Clips couldn't be retrieved at the moment. Pleast try again later." />
+        )}
         <div className="flex items-center">
-          <h1 className=" text-3xl font-bold">Manage Clips</h1>
+          <h1 className="text-3xl font-bold">Manage Clips</h1>
         </div>
         <button
           onClick={handleAddClip}

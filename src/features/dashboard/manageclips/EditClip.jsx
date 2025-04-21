@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import api from "../../../api/api";
 import { useModal } from "../../../common/ModalContext";
 import LoadingScreen from "../../../common/LoadingScreen";
+import ErrorScreen from "../../../common/ErrorScreen";
 
 const EditClip = ({ clip_id }) => {
   const [descriptionPh, setDescriptionPh] = useState("");
@@ -21,7 +22,6 @@ const EditClip = ({ clip_id }) => {
       setLoading(false);
       setError(null);
     } catch (err) {
-      console.error("Upload error:", err);
       setLoading(false);
       setError(`Error fetching clip ${clip_id}`);
     }
@@ -78,13 +78,12 @@ const EditClip = ({ clip_id }) => {
     fetchClip();
   }, []);
 
-  if (error) {
-    return <div>{error}</div>;
-  }
-
   return (
     <div>
       <LoadingScreen isVisible={loading} />
+      {error && (
+        <ErrorScreen message="Clip couldn't be retrieved at the moment. Pleast try again later." />
+      )}
       <h1 className="text-3xl font-bold mt-6 mb-6">Edit Clip</h1>
 
       <div className="flex flex-row">

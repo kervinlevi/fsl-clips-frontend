@@ -36,7 +36,7 @@ function Registration() {
       console.error(err);
       await openInfoModal({
         title: "Failed to create an account",
-        message: err.response?.data?.['error'] ?? err,
+        message: err.response?.data?.['error'] ?? "We're experiencing server issues. Try again later.",
       });
     }
   };
