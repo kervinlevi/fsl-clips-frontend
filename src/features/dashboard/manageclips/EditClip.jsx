@@ -87,18 +87,6 @@ const EditClip = ({ clip_id }) => {
       <h1 className="text-3xl font-bold mt-6 mb-6">Edit Clip</h1>
 
       <div className="flex flex-row">
-        <div className="flex w-1/5 mr-6 h-fill items-center">
-          {clip && (
-            <video
-              className="aspect-9/16 rounded-lg size-fit cursor-pointer"
-              src={`http://localhost:1337/${clip.video_url}`}
-              type="video/mp4"
-              muted
-              playsInline
-              controls
-            />
-          )}
-        </div>
         <div className="w-2/3">
           <form onSubmit={handleUpdate} className="space-y-1">
             <div className="w-full">
@@ -169,6 +157,18 @@ const EditClip = ({ clip_id }) => {
               Update clip details
             </button>
           </form>
+        </div>
+        <div className="flex w-1/5 ml-6 h-fill items-center">
+          {clip && (
+            <video
+              className="aspect-9/16 rounded-lg size-fit cursor-pointer"
+              src={`http://localhost:1337/${clip.video_url}`}
+              type="video/mp4"
+              muted
+              playsInline
+              controls
+            />
+          )}
         </div>
       </div>
     </div>
