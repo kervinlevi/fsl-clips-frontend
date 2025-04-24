@@ -5,7 +5,7 @@ import LoadingScreen from "../../../common/LoadingScreen";
 import { useModal } from "../../../common/ModalContext";
 import ErrorScreen from "../../../common/ErrorScreen";
 
-const ManageClips = ({ handleAddClip, handleEditClip }) => {
+const ManageClips = ({ handleAddClip, handleEditClip, handleError }) => {
   const [clips, setClips] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -21,6 +21,7 @@ const ManageClips = ({ handleAddClip, handleEditClip }) => {
       setError("Error fetching clips");
       console.error("Error fetching clips: ", err);
       setLoading(false);
+      handleError(err);
     }
   };
 

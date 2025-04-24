@@ -246,7 +246,7 @@ const WatchClips = () => {
               }}
               src={`http://localhost:1337/${clip.video_url}`}
               poster={`http://localhost:1337/${clip.thumbnail_url}`}
-              className="object-cover object-center md:rounded-lg bg-sky-blue cursor-all-scroll"
+              className="object-cover object-center md:rounded-lg bg-sky-blue cursor-grab"
               muted
               playsInline
               loop

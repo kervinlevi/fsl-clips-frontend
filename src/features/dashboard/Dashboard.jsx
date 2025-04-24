@@ -51,6 +51,14 @@ const Dashboard = () => {
     );
   };
 
+  const handleError = (err) => {
+    const error = err?.response?.data?.error ?? ""
+    if (error === "User is not an admin" || error === "Token not found") {
+      localStorage.clear();
+      navigate("/login", { replace: true });
+    }
+  };
+
   const highlightUsers = () => {
     return activePage === "ManageUsers" || activePage === "EditUser";
   };
@@ -120,6 +128,7 @@ const Dashboard = () => {
           <ManageClips
             handleAddClip={() => handleAddClip()}
             handleEditClip={(clip_id) => handleEditClip(clip_id)}
+            handleError={(err) => handleError(err)}
           />
         )}
         {activePage === "AddClip" && <AddClip />}
