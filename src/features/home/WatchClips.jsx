@@ -106,7 +106,7 @@ const WatchClips = () => {
         title: "Correct! 🎉🎉🎉",
         message: `You answered the quiz correctly! It's "${selected.description_ph}"`,
         overlay: false,
-        closeOnOverlayClick: false
+        closeOnOverlayClick: false,
       });
     } else {
       const correctOption = _.find(options, (option) => option.correct == true);
@@ -189,10 +189,16 @@ const WatchClips = () => {
     trackMouse: true,
   });
 
+  const onErrorRetry = () => {
+    setError(null);
+    setLoading(true);
+    setTimeout(fetchRandomClips, 1000); // delay by 1s to show the spinner
+  };
+
   return (
     <div
       {...handleSwipe}
-      className="bg-sky-blue relative overflow-auto touch-none"
+      className="bg-space-cadet relative overflow-auto touch-none"
     >
       {showConfetti && (
         <Confetti initialVelocityY={20} gravity={0.15} numberOfPieces={300} />
@@ -200,7 +206,12 @@ const WatchClips = () => {
 
       <LoadingScreen isVisible={loading} />
       {error && (
-        <ErrorScreen message="Clips couldn't be retrieved at the moment. Pleast try again later." />
+        <ErrorScreen
+          textColor="text-white"
+          buttonColor="bg-sky-blue text-space-cadet"
+          message="Clips couldn't be retrieved at the moment. Pleast try again later."
+          onRetry={onErrorRetry}
+        />
       )}
 
       <div
@@ -243,8 +254,9 @@ const WatchClips = () => {
               type="video/mp4"
             />
 
+            {/* Show description if item is not a quiz. */}
             {!clip.quiz && (
-              <div className="absolute bottom-0 left-0 w-full md:p-4 pl-8 pr-24 pb-24 pt-24 z-10 bg-gradient-to-t from-black/70 to-transparent md:rounded-b-lg">
+              <div className="absolute bottom-0 left-0 w-full md:p-4 md:pb-12 pl-8 pr-24 py-24 z-10 bg-gradient-to-t from-black/90 to-transparent md:rounded-b-lg">
                 <h3 className="text-white text-lg font-semibold mb-1 line-clamp-3">
                   {clip.description_ph}
                 </h3>
@@ -258,6 +270,8 @@ const WatchClips = () => {
                   )}
               </div>
             )}
+
+            {/* Show header and options if item is a quiz. */}
             {clip.quiz && (
               <h3 className="absolute top-0 p-4 text-white text-2xl font-semibold mb-1 center w-full text-center">
                 Quiz Time!
@@ -299,7 +313,8 @@ const WatchClips = () => {
         <button
           onClick={showNextClip}
           disabled={
-            (clipsLengthRef.current > 0 && currentIndex == clipsLengthRef.current - 1) ||
+            (clipsLengthRef.current > 0 &&
+              currentIndex == clipsLengthRef.current - 1) ||
             quizShowing.current
           }
           className="bg-white p-4 rounded-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-dye cursor-pointer transition-bg duration-100 disabled:cursor-not-allowed disabled:bg-white"
