@@ -1,3 +1,11 @@
+# Setup
+- Run the backend server first
+- Run `npm install` to get all the dependencies
+- Run `npm run dev` to up the server
+- By default, it should be accessible at `localhost:5173`
+
+
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
